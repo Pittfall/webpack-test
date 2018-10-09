@@ -1,6 +1,7 @@
 // Webpack looks for this file when executing webpack or webpack-dev-server.
 
 const path = require('path');
+const autoprefixer = require('autoprefixer');
 
 // node syntax.
 module.exports = {
@@ -20,6 +21,43 @@ module.exports = {
             test: /\.js$/, // Test if a file fulfils criteria. ex. Ends with .js.
             loader: 'babel-loader', // The package that does the work.
             exclude: /node_modules/ // Don't transform anything in node modules because they have already been optimized and transformed.
+         },
+         {
+            test: /\.css$/,
+            exclude: /node_modules/,
+            use: [ // Use is like 'loader' but a more complex setup than just defining a pacakge.
+               // 'use' parses loaders from right to left. 'css-loader' must be first because it has to first understand what the css
+               // loaders are.  Then 'style-loader' is applied on extracted css code.
+               { loader: 'syle-loader' }, // Extract css from css files and inject at top of html file so file downloads are reduced. 
+               { 
+                  loader: 'css-loader', // Tells webpack what to do with css imports
+                  options: { // Configure loader.
+                     importLoaders: 1, // 'css-loaders' needs to know if anything runs before it. The number of things to run before.
+                     modules: true, // Enable css modules
+                     localIdentName: '[name]__[local]_[hash:base64:5]' // make a unique name
+                  }
+               },
+               {
+                  loader: 'postcss-loader', // Transforms css
+                  options: {
+                     ident: 'postcss',
+                     plugins: () => [ // Steps to apply to transform everything.
+                        autoprefixer({ // auto prefixes css properties.
+                           browsers: [ // The browser configuration for what to prefix for.
+                              "> 1%",
+                              "last 2 versions"
+                           ]
+                        })
+                     ]
+                  }
+               }
+            ]
+         },
+         {
+            test: /\.(png|jpg?g|gif)$/, // The files we want to support.
+            // Take images and convert them to data64 urls which it can inline and we don't have to download file.  Files above certain limit,
+            // will be downloaded for efficieny. 'file-loader' is a package used to copy images.
+            loader: 'url-loader?limit=8000&name=images/[name].[ext]' // Only copy images if the size exceeds 8000 bytes to an images path.
          }
       ]
    }
