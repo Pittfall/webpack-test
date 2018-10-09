@@ -1,0 +1,16 @@
+// Babel will read this if it's in the same folder where we run webpack.
+// Here we specify what we want to target when babel complies next gen javascript to current.
+
+{
+   "presets": [
+      ["env", {
+         "targets": {
+            "browsers": [
+               "> 1%",
+               "last 2 versions"
+            ]
+         }
+      }],
+      "react"      
+   ]
+}
