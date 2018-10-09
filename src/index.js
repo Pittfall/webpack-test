@@ -1,5 +1,5 @@
 import React from 'react';
-import ReactDom from 'react-dom';
+import ReactDOM from 'react-dom';
 import { BrowserRouter } from 'react-router-dom';
 
 import './index.css';
@@ -11,4 +11,4 @@ const app = (
    </BrowserRouter>
 );
 
-ReactDom.render(app, document.getElementById('root'));
+ReactDOM.render(app, document.getElementById('root'));

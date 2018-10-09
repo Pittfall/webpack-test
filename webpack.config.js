@@ -2,6 +2,7 @@
 
 const path = require('path');
 const autoprefixer = require('autoprefixer');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // node syntax.
 module.exports = {
@@ -10,6 +11,7 @@ module.exports = {
    output: {
       path: path.resolve(__dirname, 'dist'), // Where output should be stored.
       filename: 'bundle.js', // The javascript files are bundled into this file.
+      chunkFilename: '[id].js', // Generated code splitting file names.
       publicPath: '' // Empty string means root folder meaning the file structure we have here is the output/deployed file structure.
    },
    resolve: {
@@ -28,7 +30,7 @@ module.exports = {
             use: [ // Use is like 'loader' but a more complex setup than just defining a pacakge.
                // 'use' parses loaders from right to left. 'css-loader' must be first because it has to first understand what the css
                // loaders are.  Then 'style-loader' is applied on extracted css code.
-               { loader: 'syle-loader' }, // Extract css from css files and inject at top of html file so file downloads are reduced. 
+               { loader: 'style-loader' }, // Extract css from css files and inject at top of html file so file downloads are reduced. 
                { 
                   loader: 'css-loader', // Tells webpack what to do with css imports
                   options: { // Configure loader.
@@ -60,5 +62,12 @@ module.exports = {
             loader: 'url-loader?limit=8000&name=images/[name].[ext]' // Only copy images if the size exceeds 8000 bytes to an images path.
          }
       ]
-   }
+   },
+   plugins: [
+      new HtmlWebpackPlugin({
+         template: __dirname + '/src/index.html',
+         filename: 'index.html',
+         inject: 'body',
+      })
+   ]
 };

@@ -3,7 +3,7 @@
 
 {
    "presets": [
-      ["env", {
+      ["@babel/env", {
          "targets": {
             "browsers": [
                "> 1%",
@@ -11,6 +11,10 @@
             ]
          }
       }],
-      "react"      
+      "@babel/react"      
+   ],
+   "plugins": [
+      "syntax-dynamic-import", // Ensures that babel understands dynamic import statements as used for code splitting, for example.
+      "@babel/plugin-proposal-class-properties"
    ]
 }
